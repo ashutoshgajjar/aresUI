@@ -1,0 +1,110 @@
+.loader {
+  width: 60px;
+  height: 60px;
+  @media (max-width: 765px) {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+.loader svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.loader path {
+  fill: none;
+  stroke: #7851A9;
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Outer intelligent path */
+.loader-path {
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+
+  animation:
+    draw 1.8s cubic-bezier(0.65, 0.05, 0.36, 1) infinite,
+    breathe 1.8s ease-in-out infinite;
+}
+
+/* Inner living path */
+.loader-inner {
+  stroke-width: 2;
+  opacity: 0.45;
+
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+
+  animation:
+    innerDraw 1.8s cubic-bezier(0.65, 0.05, 0.36, 1) infinite,
+    pulse 1.8s ease-in-out infinite;
+}
+
+/* Stroke drawing animation */
+@keyframes draw {
+  0% {
+    stroke-dashoffset: 220;
+  }
+
+  45% {
+    stroke-dashoffset: 0;
+  }
+
+  70% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: -220;
+  }
+}
+
+/* Subtle geometric breathing */
+@keyframes breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.08);
+  }
+}
+
+@keyframes innerDraw {
+  0% {
+    stroke-dashoffset: 120;
+  }
+
+  50% {
+    stroke-dashoffset: 0;
+  }
+
+  100% {
+    stroke-dashoffset: -120;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Better SVG transform behavior */
+.loader svg {
+  transform-origin: center;
+}
+
+.loader path {
+  transform-origin: center;
+}

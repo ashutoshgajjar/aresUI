@@ -1,0 +1,343 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: black;
+}
+:root.dark {
+  --bg: rgb(128, 128, 128);
+}
+
+.loader {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  border-radius: 10px;
+}
+
+@keyframes spinner {
+  0% {
+    opacity: 0.75;
+  }
+  25% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 0.25;
+  }
+  75% {
+    opacity: 0.15;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
+
+@keyframes icon-pop {
+    from {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+.animate-icon-pop {
+    animation: icon-pop 500ms linear(0, 0.0473, 0.0934, 0.1381, 0.1816, 0.2239, 0.2648, 0.3046, 0.3432, 0.3806, 0.4168, 0.4519, 0.4858, 0.5186, 0.5503, 0.581, 0.6105, 0.639, 0.6665, 0.6929, 0.7184, 0.7429, 0.7664, 0.7889, 0.8105, 0.8313, 0.8511, 0.87, 0.888, 0.9052, 0.9216, 0.9372, 0.9519, 0.9659, 0.9791, 0.9916, 1.0033, 1.0143, 1.0246, 1.0342, 1.0432, 1.0515, 1.0592, 1.0663, 1.0728, 1.0787, 1.084, 1.0888, 1.093, 1.0968, 1.1, 1.1028, 1.1051, 1.1069, 1.1083, 1.1094, 1.11, 1.1102, 1.1101, 1.1096, 1.1088, 1.1077, 1.1063, 1.1046, 1.1026, 1.1005, 1.098, 1.0954, 1.0926, 1.0896, 1.0864, 1.0831, 1.0797, 1.0761, 1.0725, 1.0688, 1.065, 1.0612, 1.0573, 1.0534, 1.0496, 1.0458, 1.042, 1.0383, 1.0346, 1.0311, 1.0276, 1.0243, 1.0211, 1.0181, 1.0152, 1.0125, 1.0101, 1.0079, 1.0059, 1.0042, 1.0027, 1.0015, 1.0007, 1.0002, 1);
+}
+
+/* Progressive enhancement for modern browsers */
+@supports (appearance: base-select) {
+  select.custom-native-select,
+  select.custom-native-select::picker(select) {
+    appearance: base-select;
+  }
+
+  select.custom-native-select::picker(select) {
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    background: white;
+    padding: 0.25rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.08);
+    margin-top: 0.5rem;
+  }
+
+  select.custom-native-select option {
+    border-radius: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
+    color: #334155;
+    cursor: pointer;
+  }
+
+  select.custom-native-select option:hover,
+  select.custom-native-select option:focus {
+    background-color: #f1f5f9;
+  }
+
+  select.custom-native-select option:checked {
+    background-color: #eef2ff;
+    color: #4f46e5;
+    font-weight: 600;
+  }
+}
+@layer components {
+  .pro-select-group {
+    /* 1. Single source of truth tokens + color-mix() derivatives */
+    --_accent: #853DCA;
+    --_bg: #ffffff;
+    --_bg-subtle: #F6F1FB;
+    --_border: #e2e8f0;
+    --_border-hover: #cbd5e1;
+    --_text: #0f172a;
+    --_text-muted: #64748b;
+    --_radius: 0.425rem; /* 10px - crisp SaaS curvature */
+
+    /* Derived tokens using modern oklab color-mix */
+    --_focus-ring: color-mix(in oklab, var(--_accent) 16%, transparent);
+    --_checked-bg: color-mix(in oklab, var(--_accent) 20%, white);
+    --_chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='currentColor' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+    --_check-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M13.25 4.75 6 12 2.75 8.75'/%3E%3C/svg%3E");
+
+    display: inline-flex;
+    align-items: stretch;
+    /* block-size: 2.375rem; */
+    background-color: var(--_bg);
+    border: 1px solid var(--_border);
+    border-radius: var(--_radius);
+    /* Tactile top inner highlight + subtle drop elevation */
+    box-shadow:
+      0 1px 2px 0 rgb(15 23 42 / 0.04),
+      inset 0 1px 0 0 rgb(255 255 255 / 0.8);
+    cursor: pointer;
+    user-select: none;
+    transition:
+      border-color 150ms ease,
+      box-shadow 150ms ease,
+      background-color 150ms ease;
+
+    &:hover {
+      border-color: var(--_border-hover);
+    }
+
+    /* Keyboard-only focus halo + open state ring */
+    &:has(:focus-visible),
+    &:has(select:open) {
+      border-color: var(--_accent);
+      box-shadow:
+        0 1px 2px 0 rgb(15 23 42 / 0.04),
+        0 0 0 3px var(--_focus-ring);
+    }
+  }
+
+  /* 2. Split-Well Prefix (gives distinct visual hierarchy) */
+  .pro-select-prefix {
+    display: inline-flex;
+    align-items: center;
+    padding-inline: 0.75rem 0.625rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: var(--_text-muted);
+    background-color: color-mix(in oklab, var(--_accent) 5%, white);;
+    border-inline-end: 1px solid var(--_border);
+    border-start-start-radius: calc(var(--_radius) - 1px);
+    border-end-start-radius: calc(var(--_radius) - 1px);
+    transition: border-color 150ms ease;
+  }
+
+  /* 3. Base Select Control */
+  .pro-select {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    padding-inline: 0.625rem 0.5rem;
+    font-family: inherit;
+    font-size: 0.8125rem; /* 13px - sweet spot for data tables */
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--_text);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    field-sizing: content;
+  }
+
+  /* =========================================================
+     4. Modern Customizable Select (Chromium 135+)
+     ========================================================= */
+  @supports (appearance: base-select) {
+    .pro-select,
+    .pro-select::picker(select) {
+      appearance: base-select;
+    }
+
+    .pro-select {
+      gap: 0.375rem;
+      padding-inline: 0.625rem 0.5rem;
+      transition: background-color 120ms ease;
+
+      &:hover {
+        background-color: color-mix(in oklab, var(--_bg-subtle) 60%, transparent);
+      }
+    }
+
+    /* Hide secondary "rows" metadata inside the compact closed button,
+       show it only inside the open dropdown list */
+    .pro-select > button .pro-option-meta {
+      display: none;
+    }
+
+    /* Replace clunky default arrow with crisp Masked SVG Chevron */
+    .pro-select::picker-icon {
+      content: "";
+      inline-size: 0.875rem;
+      block-size: 0.875rem;
+      background-color: var(--_text-muted);
+      mask-image: var(--_chevron-svg);
+      mask-repeat: no-repeat;
+      mask-position: center;
+      mask-size: contain;
+      transition:
+        rotate 200ms cubic-bezier(0.16, 1, 0.3, 1),
+        background-color 150ms ease;
+    }
+
+    .pro-select-group:hover .pro-select::picker-icon {
+      background-color: var(--_text);
+    }
+
+    .pro-select:open::picker-icon {
+      rotate: 180deg;
+      background-color: var(--_accent);
+    }
+
+    /* Floating Popover Menu */
+    .pro-select::picker(select) {
+      min-inline-size: 5rem;
+      margin-block-start: 0.375rem;
+      padding: 0.25rem;
+      background-color: var(--_bg);
+      border: 1px solid var(--_border);
+      border-radius: calc(var(--_radius) + 0.125rem);
+      /* Multi-layered glass/SaaS popover shadow */
+      box-shadow:
+        0 10px 25px -5px rgb(15 23 42 / 0.08),
+        0 4px 10px -4px rgb(15 23 42 / 0.04),
+        0 0 0 1px rgb(15 23 42 / 0.02);
+
+      /* Discrete popover exit state */
+      opacity: 0;
+      scale: 0.96;
+      translate: 0 -0.25rem;
+      transform-origin: top center;
+      transition:
+        opacity 140ms ease-out,
+        scale 140ms cubic-bezier(0.16, 1, 0.3, 1),
+        translate 140ms cubic-bezier(0.16, 1, 0.3, 1),
+        display 140ms allow-discrete,
+        overlay 140ms allow-discrete;
+    }
+
+    /* Popover open state */
+    .pro-select:open::picker(select) {
+      opacity: 1;
+      scale: 1;
+      translate: 0 0;
+    }
+
+    /* Popover entry animation */
+    @starting-style {
+      .pro-select:open::picker(select) {
+        opacity: 0;
+        scale: 0.96;
+        translate: 0 -0.25rem;
+      }
+    }
+
+    /* Subtle divider support inside select */
+    .pro-select hr {
+      margin-block: 0.25rem;
+      border: none;
+      border-block-start: 1px solid var(--_border);
+    }
+
+    /* Individual Options */
+    .pro-select option {
+      display: flex;
+      margin: 0.25rem 0;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.4375rem 0.625rem;
+      border-radius: calc(var(--_radius) - 0.125rem);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      font-variant-numeric: tabular-nums;
+      color: var(--_text);
+      cursor: pointer;
+      transition: background-color 100ms ease, color 100ms ease;
+
+      &:hover,
+      &:focus-visible {
+        background-color: var(--_bg-subtle);
+        outline: none;
+      }
+
+      &:first-child {
+        margin-top: 0;
+      }
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+      
+      &:checked {
+        background-color: var(--_checked-bg);
+        color: var(--_accent);
+        font-weight: 600;
+      }
+
+      /* Replace default text checkmark with crisp SVG mask */
+      &::checkmark {
+        order: 1;
+        content: "";
+        inline-size: 0.875rem;
+        block-size: 0.875rem;
+        margin-inline-start: auto;
+        background-color: var(--_accent);
+        mask-image: var(--_check-svg);
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: contain;
+      }
+    }
+
+    .pro-option-meta {
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--_text-muted);
+    }
+  }
+
+  /* =========================================================
+     5. Graceful Fallback (Safari / Firefox)
+     ========================================================= */
+  @supports not (appearance: base-select) {
+    .pro-select {
+      padding-inline-end: 1.75rem;
+      background-image: var(--_chevron-svg);
+      background-repeat: no-repeat;
+      background-position: right 0.5rem center;
+      background-size: 0.875rem;
+    }
+  }
+}

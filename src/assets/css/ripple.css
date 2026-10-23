@@ -1,0 +1,190 @@
+@layer components {
+  .ripple-btn {
+    /* Dynamic HSL Tokens (--l-dir is 1 for dark/mid colors, -1 for light colors) */
+    --base-color: hsl(var(--btn-h) var(--btn-s) var(--btn-l));
+    --hover-highlight: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 6%)));
+    --border-highlight: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 14%)));
+    --glow-shadow: hsl(var(--btn-h) var(--btn-s) var(--btn-l) / 0.38);
+
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: inherit;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    isolation: isolate;
+    -webkit-tap-highlight-color: transparent;
+    border: 2px solid transparent;
+    transition:
+      background-color 180ms ease,
+      border-color 180ms ease,
+      box-shadow 200ms ease,
+      transform 150ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Variants */
+  .ripple-btn--solid {
+    background-color: var(--base-color);
+    color: hsl(var(--btn-h) 25% 98%);
+    border: 1px solid hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 10%)) / 0.35);
+    box-shadow: 0 2px 10px -2px var(--glow-shadow);
+    --ripple-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + 28%) / 0.42);
+    --ripple-edge: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + 35%) / 0.55);
+    --ripple-hold-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + 32%) / 0.5);
+  }
+
+  /* Darken text and ripple hold color when solid button has a light background */
+  .ripple-btn--solid[data-light='true'] {
+    color: hsl(var(--btn-h) 45% 14%);
+    --ripple-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) - 12%) / 0.32);
+    --ripple-edge: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) - 20%) / 0.45);
+    --ripple-hold-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) - 22%) / 0.48);
+  }
+
+  .ripple-btn--solid:hover:not(:disabled) {
+    background-color: var(--hover-highlight);
+    /* border-color: var(--border-highlight); */
+    box-shadow: 0 4px 16px -2px var(--glow-shadow);
+  }
+
+  .ripple-btn--soft {
+    background-color: hsl(var(--btn-h) var(--btn-s) var(--btn-l) / 0.14);
+    color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 12%)));
+    /* border: 1px solid hsl(var(--btn-h) var(--btn-s) var(--btn-l) / 0.24); */
+    border: 1px solid transparent;
+    --ripple-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 12%)) / 0.26);
+    --ripple-edge: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 18%)) / 0.38);
+    --ripple-hold-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 20%)) / 0.38);
+  }
+  .ripple-btn--soft:hover:not(:disabled) {
+    background-color: hsl(var(--btn-h) var(--btn-s) var(--btn-l) / 0.22);
+    border-color: var(--border-highlight);
+  }
+
+  .ripple-btn--outline {
+    background-color: transparent;
+    color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 10%)));
+    border: 1px solid hsl(var(--btn-h) var(--btn-s) var(--btn-l) / 0.55);
+    --ripple-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 10%)) / 0.22);
+    --ripple-edge: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 16%)) / 0.34);
+    --ripple-hold-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 18%)) / 0.34);
+  }
+  .ripple-btn--outline:hover:not(:disabled) {
+    border-color: var(--border-highlight);
+    background-color: hsl(var(--btn-h) var(--btn-s) var(--btn-l) / 0.08);
+  }
+
+  .ripple-btn--ghost {
+    background-color: transparent;
+    color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 10%)));
+    border: 1px solid transparent;
+    --ripple-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 10%)) / 0.2);
+    --ripple-edge: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 16%)) / 0.32);
+    --ripple-hold-color: hsl(var(--btn-h) var(--btn-s) calc(var(--btn-l) + (var(--l-dir) * 18%)) / 0.32);
+  }
+  .ripple-btn--ghost:hover:not(:disabled) {
+    background-color: hsl(var(--btn-h) var(--btn-s) var(--btn-l) / 0.1);
+    /* border-color: var(--border-highlight); */
+  }
+
+  /* Active Hold State on Button */
+  .ripple-btn[data-held='true']:not(:disabled) {
+    /* transform: scale(0.98); */
+    /* border-color: var(--border-highlight); */
+    box-shadow: 0 0 20px -2px var(--glow-shadow);
+  }
+
+  .ripple-btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+
+  /* Content & Ripple Layer */
+  .ripple-btn__content {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+  }
+
+  .ripple-btn__layer {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+    border-radius: inherit;
+  }
+
+  .ripple-btn__wave {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    background: radial-gradient(
+      circle,
+      var(--ripple-color) 0%,
+      var(--ripple-color) 62%,
+      var(--ripple-edge) 100%
+    );
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 1;
+    animation: ripple-expand var(--ripple-duration) linear(0, 0.0157, 0.0314, 0.0471, 0.0628, 0.0785, 0.0941, 0.1097, 0.1253, 0.1409, 0.1564, 0.1719, 0.1874, 0.2028, 0.2181, 0.2334, 0.2487, 0.2639, 0.279, 0.294, 0.309, 0.3239, 0.3387, 0.3535, 0.3681, 0.3827, 0.3971, 0.4115, 0.4258, 0.4399, 0.454, 0.4679, 0.4818, 0.4955, 0.509, 0.5225, 0.5358, 0.549, 0.5621, 0.575, 0.5878, 0.6004, 0.6129, 0.6252, 0.6374, 0.6494, 0.6613, 0.673, 0.6845, 0.6959, 0.7071, 0.7181, 0.729, 0.7396, 0.7501, 0.7604, 0.7705, 0.7804, 0.7902, 0.7997, 0.809, 0.8181, 0.8271, 0.8358, 0.8443, 0.8526, 0.8607, 0.8686, 0.8763, 0.8838, 0.891, 0.898, 0.9048, 0.9114, 0.9178, 0.9239, 0.9298, 0.9354, 0.9409, 0.9461, 0.9511, 0.9558, 0.9603, 0.9646, 0.9686, 0.9724, 0.9759, 0.9792, 0.9823, 0.9851, 0.9877, 0.99, 0.9921, 0.994, 0.9956, 0.9969, 0.998, 0.9989, 0.9995, 0.9999, 1) forwards;
+    transition: opacity 350ms ease, background 220ms ease;
+  }
+
+  /* Held State */
+  .ripple-btn__wave--held {
+    background: radial-gradient(
+      circle,
+      var(--ripple-hold-color) 0%,
+      var(--ripple-hold-color) 65%,
+      var(--ripple-edge) 100%
+    );
+    animation:
+      ripple-expand var(--ripple-duration) linear(0, 0.0157, 0.0314, 0.0471, 0.0628, 0.0785, 0.0941, 0.1097, 0.1253, 0.1409, 0.1564, 0.1719, 0.1874, 0.2028, 0.2181, 0.2334, 0.2487, 0.2639, 0.279, 0.294, 0.309, 0.3239, 0.3387, 0.3535, 0.3681, 0.3827, 0.3971, 0.4115, 0.4258, 0.4399, 0.454, 0.4679, 0.4818, 0.4955, 0.509, 0.5225, 0.5358, 0.549, 0.5621, 0.575, 0.5878, 0.6004, 0.6129, 0.6252, 0.6374, 0.6494, 0.6613, 0.673, 0.6845, 0.6959, 0.7071, 0.7181, 0.729, 0.7396, 0.7501, 0.7604, 0.7705, 0.7804, 0.7902, 0.7997, 0.809, 0.8181, 0.8271, 0.8358, 0.8443, 0.8526, 0.8607, 0.8686, 0.8763, 0.8838, 0.891, 0.898, 0.9048, 0.9114, 0.9178, 0.9239, 0.9298, 0.9354, 0.9409, 0.9461, 0.9511, 0.9558, 0.9603, 0.9646, 0.9686, 0.9724, 0.9759, 0.9792, 0.9823, 0.9851, 0.9877, 0.99, 0.9921, 0.994, 0.9956, 0.9969, 0.998, 0.9989, 0.9995, 0.9999, 1) forwards,
+      ripple-hold-pulse 1.4s ease-in-out var(--ripple-duration) infinite alternate;
+  }
+  /* cubic-bezier(0.5, 1, 0.3, 0.7) */
+  /* Darken the hold pulse on light colors */
+  .ripple-btn[data-light='true'] .ripple-btn__wave--held {
+    animation:
+      ripple-expand var(--ripple-duration) linear(0, 0.0157, 0.0314, 0.0471, 0.0628, 0.0785, 0.0941, 0.1097, 0.1253, 0.1409, 0.1564, 0.1719, 0.1874, 0.2028, 0.2181, 0.2334, 0.2487, 0.2639, 0.279, 0.294, 0.309, 0.3239, 0.3387, 0.3535, 0.3681, 0.3827, 0.3971, 0.4115, 0.4258, 0.4399, 0.454, 0.4679, 0.4818, 0.4955, 0.509, 0.5225, 0.5358, 0.549, 0.5621, 0.575, 0.5878, 0.6004, 0.6129, 0.6252, 0.6374, 0.6494, 0.6613, 0.673, 0.6845, 0.6959, 0.7071, 0.7181, 0.729, 0.7396, 0.7501, 0.7604, 0.7705, 0.7804, 0.7902, 0.7997, 0.809, 0.8181, 0.8271, 0.8358, 0.8443, 0.8526, 0.8607, 0.8686, 0.8763, 0.8838, 0.891, 0.898, 0.9048, 0.9114, 0.9178, 0.9239, 0.9298, 0.9354, 0.9409, 0.9461, 0.9511, 0.9558, 0.9603, 0.9646, 0.9686, 0.9724, 0.9759, 0.9792, 0.9823, 0.9851, 0.9877, 0.99, 0.9921, 0.994, 0.9956, 0.9969, 0.998, 0.9989, 0.9995, 0.9999, 1) forwards,
+      ripple-hold-pulse-dark 1.4s ease-in-out var(--ripple-duration) infinite alternate;
+  }
+
+  .ripple-btn__wave--fading {
+    opacity: 0;
+  }
+}
+
+@keyframes ripple-expand {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes ripple-hold-pulse {
+  0% {
+    filter: brightness(1);
+  }
+  100% {
+    filter: brightness(1.18);
+  }
+}
+
+@keyframes ripple-hold-pulse-dark {
+  0% {
+    filter: brightness(0.96);
+  }
+  100% {
+    filter: brightness(0.86);
+  }
+}

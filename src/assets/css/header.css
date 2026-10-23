@@ -1,0 +1,120 @@
+.nav {
+  /* width: fit-content; */
+  /* margin: 0 auto; */
+  /* font-size: 1rem; */
+  padding: 4px;
+  /* border-radius: 8px; */
+
+  isolation: isolate;
+
+  anchor-name: --hovered-link;
+
+  li:hover {
+    anchor-name: --hovered-link;
+  }
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    /* 1rem default for l+R */
+    top: calc(anchor(bottom) - 10px);
+    left: calc(anchor(left) + 1rem);
+    right: calc(anchor(right) + 1rem);
+    bottom: calc(anchor(bottom) + 5px);
+    border-radius: 10px;
+    --easing: linear(0, 0.067, 0.1294, 0.1877, 0.2421, 0.2929, 0.3402, 0.3844, 0.4257, 0.4641, 0.5, 0.5335, 0.5647, 0.5939, 0.6211, 0.6464, 0.6701, 0.6922, 0.7128, 0.7321, 0.75, 0.7667, 0.7824, 0.7969, 0.8105, 0.8232, 0.8351, 0.8461, 0.8564, 0.866, 0.875, 0.8834, 0.8912, 0.8985, 0.9053, 0.9116, 0.9175, 0.9231, 0.9282, 0.933, 0.9375, 0.9417, 0.9456, 0.9492, 0.9526, 0.9558, 0.9588, 0.9615, 0.9641, 0.9665, 0.9688, 0.9708, 0.9728, 0.9746, 0.9763, 0.9779, 0.9794, 0.9808, 0.9821, 0.9833, 0.9844, 0.9854, 0.9864, 0.9873, 0.9882, 0.989, 0.9897, 0.9904, 0.991, 0.9916, 0.9922, 0.9927, 0.9932, 0.9937, 0.9941, 0.9945, 0.9948, 0.9952, 0.9955, 0.9958, 0.9961, 0.9964, 0.9966, 0.9968, 0.997, 0.9972, 0.9974, 0.9976, 0.9978, 0.9979, 0.998, 0.9982, 0.9983, 0.9984, 0.9985, 0.9986, 0.9987, 0.9988, 0.9989, 0.999, 1);
+    position-anchor: --hovered-link;
+
+    transition:
+      top 300ms var(--easing) 0ms,
+      bottom 300ms var(--easing) 0ms,
+      left 400ms var(--easing) 200ms,
+      right 400ms var(--easing) 200ms;
+    }
+
+  &::before {
+    z-index: -1;
+    background: hsl(270 50% 50% / 0.5);
+    backdrop-filter: blur(2px);
+  }
+
+  &::after {
+    z-index: -2;
+    /* background-image: url("https://images.unsplash.com/photo-1751220170218-e57d53bd4aa8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3wzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE3NTE1NjQ0MjR8&ixlib=rb-4.1.0&q=80&w=1800"); */
+    /* background-attachment: fixed; */
+  }
+
+  &:has(li:hover)::before,
+  &:has(li:hover)::after {
+    top: anchor(top);
+    left: anchor(left);
+    right: anchor(right);
+    bottom: anchor(bottom);
+    transition:
+      top 300ms var(--easing) 200ms,
+      bottom 300ms var(--easing) 200ms,
+      left 400ms var(--easing) 0ms,
+      right 400ms var(--easing) 0ms;
+    @supports (corner-shape: round) {
+      corner-shape: round;
+      border-radius: 5%;
+    }
+  }
+
+  > ul {
+    padding: .75rem;
+    margin: 0;
+    list-style: none;
+    display: flex;
+  }
+
+  a {
+    display: block;
+    padding: .5rem 1rem;
+    text-decoration: none;
+    color: black;
+  }
+
+/*   &:has(li:first-of-type a:hover)::before,
+  &:has(li:first-of-type a:hover)::after {
+    @supports (corner-shape: squircle) {
+      border-radius: 32px 50% 50% 32px;
+    }
+  } */
+
+/*   &:has(li:last-of-type a:hover)::before,
+  &:has(li:last-of-type a:hover)::after {
+    @supports (corner-shape: squircle) {
+      border-radius: 50% 32px 32px 50%;
+    }
+  } */
+
+/*   @supports (corner-shape: squircle) {
+    border-radius: 24px;
+    corner-shape: squircle;
+  } */
+}
+
+/* 
+nav ul > :nth-child(1) { anchor-name: --link-1; }
+nav ul > :nth-child(2) { anchor-name: --link-2; }
+nav ul > :nth-child(3) { anchor-name: --link-3; }
+nav ul > :nth-child(4) { anchor-name: --link-4; }
+
+
+nav:has(ul > :nth-child(1):hover)::after {
+  position-anchor: --link-1;
+}
+
+nav:has(ul > :nth-child(2):hover)::after {
+  position-anchor: --link-2;
+}
+
+nav:has(ul > :nth-child(3):hover)::after {
+  position-anchor: --link-3;
+}
+
+nav:has(ul > :nth-child(4):hover)::after {
+  position-anchor: --link-4;
+} */
