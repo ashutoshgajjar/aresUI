@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router";
+import { Link, useLocation, useNavigate, useParams } from "react-router";
 import {
     FiActivity,
     FiArrowLeft,
@@ -24,6 +24,7 @@ import {
 
 import { apiGet, apiPatch } from "@/api/client";
 import { RippleButton } from "@/components/RippleButton";
+import toast from "react-hot-toast";
 
 const PRIMARY_BUTTON = { hue: 270, saturation: 75, lightness: 55 };
 const MUTED_BUTTON = { hue: 220, saturation: 12, lightness: 45 };
@@ -538,10 +539,24 @@ function getUserName(user) {
         user?.name || user?.full_name || contact.username || contact.email || `User ${user?.id ?? ""}`;
 }
 
+function slugifyFullName(fullName) {
+    return String(fullName ?? "")
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
 export default function UserDetailsPage() {
     const params = useParams();
-    const userId = params.userId ?? params.id;
+    const location = useLocation();
     const navigate = useNavigate();
+
+    const routeUserParam = params.userId ?? params.id;
+
+    const userId = location.state?.userId ?? routeUserParam;
 
     const [profile, setProfile] = useState(null);
     const [draft, setDraft] = useState(null);
@@ -585,6 +600,43 @@ export default function UserDetailsPage() {
         load();
         return () => { active = false; };
     }, [userId, refreshKey]);
+    
+    useEffect(() => {
+        if (!profile || isLoading || !userId) return;
+
+        // Prevent a previous user's profile from changing the URL.
+        if (
+            profile.id != null &&
+            String(profile.id) !== String(userId)
+        ) {
+            return;
+        }
+
+        const slug = slugifyFullName(getUserName(profile));
+
+        if (!slug) return;
+
+        const currentPath = location.pathname.replace(/\/+$/, "");
+        const nextPath = `/users/${slug}`;
+
+        if (currentPath === nextPath) return;
+
+        navigate(nextPath, {
+            replace: true,
+            state: {
+                ...(location.state ?? {}),
+                userId: profile.id ?? userId,
+            },
+        });
+    }, [
+        profile,
+        isLoading,
+        userId,
+        location.pathname,
+        location.state,
+        navigate,
+    ]);
+    
 
     const onFieldChange = useCallback((path, value) => {
         setDraft((current) => {
@@ -638,7 +690,7 @@ export default function UserDetailsPage() {
             setDraft(deepClone(saved));
             setSensitiveEdits({});
             setIsEditing(false);
-            setSuccess("User details have been updated successfully.");
+            toast.success("User details have been updated successfully.");
         } catch (err) {
             setError(err?.message || "Unable to save user details. Please try again.");
         } finally {
