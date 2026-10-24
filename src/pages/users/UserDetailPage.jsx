@@ -22,9 +22,12 @@ import {
     FiX,
 } from "react-icons/fi";
 
+import { FaUserLarge } from "react-icons/fa6";
+
 import { apiGet, apiPatch } from "@/api/client";
 import { RippleButton } from "@/components/RippleButton";
 import toast from "react-hot-toast";
+import Loader from "@/components/UI/Loader";
 
 const PRIMARY_BUTTON = { hue: 270, saturation: 75, lightness: 55 };
 const MUTED_BUTTON = { hue: 220, saturation: 12, lightness: 45 };
@@ -556,7 +559,7 @@ export default function UserDetailsPage() {
 
     const routeUserParam = params.userId ?? params.id;
 
-    const userId = location.state?.userId ?? routeUserParam;
+    const userId = location.state?.userId;
 
     const [profile, setProfile] = useState(null);
     const [draft, setDraft] = useState(null);
@@ -571,30 +574,64 @@ export default function UserDetailsPage() {
 
     useEffect(() => {
         let active = true;
+        // async function load() {
+        //     if (!userId) {
+        //         if (active) {
+        //             setError("A user ID is required to open this page.");
+        //             setProfile(null);
+        //             setIsLoading(false);
+        //         }
+        //         return;
+        //     }
+        //     if (active) {
+        //         setIsLoading(true);
+        //         setError("");
+        //     }
+        //     try {
+        //         const result = normalizeUser(await apiGet(`/users/${encodeURIComponent(userId)}/`));
+        //         if (!result) throw new Error("The server returned an invalid user record.");
+        //         if (active) setProfile(result);
+        //     } catch (err) {
+        //         if (active) {
+        //             setProfile(null);
+        //             setError(err?.message || "Unable to load this user. Please try again.");
+        //         }
+        //     } finally {
+        //         if (active) setIsLoading(false);
+        //     }
+        // }
         async function load() {
             if (!userId) {
-                if (active) {
-                    setError("A user ID is required to open this page.");
-                    setProfile(null);
-                    setIsLoading(false);
-                }
+                setError(
+                    "User ID is missing. Open this profile from the users list."
+                );
+                setProfile(null);
+                setIsLoading(false);
                 return;
             }
-            if (active) {
-                setIsLoading(true);
-                setError("");
-            }
+
+            setIsLoading(true);
+            setError("");
+
             try {
-                const result = normalizeUser(await apiGet(`/users/${encodeURIComponent(userId)}/`));
-                if (!result) throw new Error("The server returned an invalid user record.");
-                if (active) setProfile(result);
-            } catch (err) {
-                if (active) {
-                    setProfile(null);
-                    setError(err?.message || "Unable to load this user. Please try again.");
+                const result = normalizeUser(
+                    await apiGet(
+                        `/users/${encodeURIComponent(userId)}/`
+                    )
+                );
+
+                if (!result) {
+                    throw new Error("The server returned an invalid user record.");
                 }
+
+                setProfile(result);
+            } catch (err) {
+                setProfile(null);
+                setError(
+                    err?.message || "Unable to load this user. Please try again."
+                );
             } finally {
-                if (active) setIsLoading(false);
+                setIsLoading(false);
             }
         }
         load();
@@ -726,12 +763,7 @@ export default function UserDetailsPage() {
 
     if (isLoading) {
         return (
-            <main className="flex min-h-screen items-center justify-center bg-slate-50 px-4 dark:bg-slate-950">
-                <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white px-10 py-10 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                    <FiRefreshCw size={24} className="animate-spin text-violet-600" />
-                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Loading user details...</p>
-                </div>
-            </main>
+            <Loader />
         );
     }
 
@@ -775,16 +807,15 @@ export default function UserDetailsPage() {
     return (
         <main className="min-h-screen bg-slate-50/80 px-4 py-6 text-slate-900 dark:bg-slate-950 dark:text-white sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl space-y-6">
-                <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                {/* <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                     <Link to="/users" className="font-medium transition hover:text-violet-700 dark:hover:text-violet-300">Users</Link>
                     <FiChevronRight size={14} />
                     <span className="max-w-[260px] truncate font-medium text-slate-700 dark:text-slate-200">{fullName}</span>
-                </nav>
+                </nav> */}
 
                 <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                     <div>
-                        <p className="text-sm font-semibold text-violet-700 dark:text-violet-300">User management</p>
-                        <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-950 dark:text-white sm:text-4xl">User details</h1>
+                        <h1 className="text-xl font-semibold text-violet-700 dark:text-violet-300"><span className="flex items-center gap-2"><FaUserLarge size={18} />User details</span></h1>
                         <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-400">Review account information, manage profile data, and inspect system-controlled attributes.</p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -873,7 +904,8 @@ export default function UserDetailsPage() {
                                                 key={id}
                                                 href={`#${id}`}
                                                 aria-current={isActive ? "location" : undefined}
-                                                onClick={() => setActiveSection(id)}
+                                                // onClick={() => setActiveSection(id)}
+                                                onClick={(event) => {event.preventDefault(); setActiveSection(id); document.getElementById(id)?.scrollIntoView({behavior: "smooth",block: "start",});}}
                                                 className={`group flex min-w-0 items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-300 ${isActive ? "bg-violet-100 text-violet-800 shadow-sm ring-1 ring-inset ring-violet-200 dark:bg-violet-500/15 dark:text-violet-200 dark:ring-violet-400/20" : "text-slate-600 hover:bg-violet-50 hover:text-violet-700 dark:text-slate-300 dark:hover:bg-violet-500/10 dark:hover:text-violet-300"}`}
                                             >
                                                 <Icon size={16} className={`shrink-0 ${isActive ? "text-violet-700 dark:text-violet-300" : "text-slate-400 group-hover:text-violet-600 dark:group-hover:text-violet-300"}`} />
@@ -930,7 +962,7 @@ export default function UserDetailsPage() {
                     )}
                 </form>
 
-                <div className="mt-4 rounded-2xl border border-violet-100 bg-violet-50/70 p-4 dark:border-violet-400/15 dark:bg-violet-500/5">
+                <div className="mt-4 rounded-2xl border border-violet-200 bg-violet-50 p-4 dark:border-violet-400/15 dark:bg-violet-500/5">
                     <div className="flex items-center gap-2 text-violet-800 dark:text-violet-200">
                         <FiShield size={17} />
                         <h3 className="text-sm font-semibold">Privacy and security</h3>

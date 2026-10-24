@@ -105,6 +105,66 @@ function LoadingRows() {
     ));
 }
 
+function getUserFullName(user) {
+    const personal =
+        user?.personal ??
+        user?.profile?.personal ??
+        {};
+
+    const profile = user?.profile ?? {};
+    const contact = user?.contact ?? {};
+
+    const firstName =
+        personal.firstName ??
+        user?.firstName ??
+        user?.first_name;
+
+    const middleName =
+        personal.middle ??
+        user?.middleName ??
+        user?.middle_name;
+
+    const lastName =
+        personal.lastName ??
+        user?.lastName ??
+        user?.last_name;
+
+    const structuredName = [
+        personal.prefix,
+        firstName,
+        middleName,
+        lastName,
+        personal.suffix,
+    ]
+        .filter(Boolean)
+        .join(" ");
+
+    return String(
+        personal.displayName ||
+        profile.displayName ||
+        user?.displayName ||
+        structuredName ||
+        user?.full_name ||
+        user?.fullName ||
+        user?.name ||
+        profile.name ||
+        contact.name ||
+        ""
+    ).trim();
+}
+
+function slugifyFullName(fullName, userId) {
+    const slug = String(fullName ?? "")
+        .normalize("NFKD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+
+    return slug || userId;
+}
+
 export default function UserListPage() {
     const [data, setData] = useState(null);
     const [error, setError] = useState('');
@@ -545,7 +605,9 @@ export default function UserListPage() {
 
                                                     <td className='border border-[#F1E8F9] px-6 py-4 text-right'>
                                                         <Link
-                                                            to={`/users/${user.id}`}
+                                                            // to={`/users/${user.id}`}
+                                                            to={`/users/${slugifyFullName(identity.fullName,user.id)}`}
+                                                            state={{ userId: user.id }}
                                                         >
                                                             <RippleButton
                                                                 hue={270}

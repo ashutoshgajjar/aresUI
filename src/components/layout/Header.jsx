@@ -219,6 +219,21 @@ export default function Header({
                             </Link>
                         </li>
 
+                        {location.pathname != '/dashboard' && (
+                            <li className="flex  items-center gap-1.5">
+                                <FaChevronRight
+                                    size={9}
+                                    className="text-slate-400 shrink-0"
+                                />
+                                    <Link
+                                        to="/dashboard"
+                                        className="px-1.5 py-0.5 rounded-md text-slate-600 hover:text-neutral-950 hover:bg-white/50 transition-colors"
+                                    >
+                                        Dashboard
+                                    </Link>
+                            </li>
+                        )}
+
                         {computedBreadcrumbs.map((crumb, index) => {
                             const isLast =
                                 index === computedBreadcrumbs.length - 1;

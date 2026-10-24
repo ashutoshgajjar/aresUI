@@ -27,28 +27,74 @@ export default function DashboardPage() {
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState("");
+    const [totalUsers, setTotalUsers] = useState(null);
+    const [adminCount, setAdminCount] = useState(null);
+    const [countsError, setCountsError] = useState("");
 
     const loadDashboard = useCallback(async (isRefresh = false) => {
         setError("");
+        setCountsError("");
         isRefresh ? setRefreshing(true) : setLoading(true);
 
-        try {
-            const result = await getDashboardData();
-            setData(result);
-        } catch (err) {
-            setError(err?.message || "Unable to load dashboard data.");
-        } finally {
-            setLoading(false);
-            setRefreshing(false);
+        // try {
+        //     const result = await getDashboardData();
+        //     setData(result);
+        // } catch (err) {
+        //     setError(err?.message || "Unable to load dashboard data.");
+        // } finally {
+        //     setLoading(false);
+        //     setRefreshing(false);
+        // }
+
+         const [dashboardResult, usersResult, adminsResult] = await Promise.allSettled([
+            getDashboardData(),
+            usersApi.list({ limit: 1, offset: 0 }),
+            usersApi.list({ limit: 1, offset: 0, role: "admin" }),
+        ]);
+
+        if (dashboardResult.status === "fulfilled") {
+            setData(dashboardResult.value);
+        } else {
+            setError(dashboardResult.reason?.message || "Unable to load dashboard data.");
         }
+
+        let countRequestFailed = false;
+        if (usersResult.status === "fulfilled") {
+            setTotalUsers(Number(usersResult.value?.count ?? 0));
+        } else {
+            setTotalUsers(null);
+            countRequestFailed = true;
+        }
+
+        if (adminsResult.status === "fulfilled") {
+            setAdminCount(Number(adminsResult.value?.count ?? 0));
+        } else {
+            setAdminCount(null);
+            countRequestFailed = true;
+        }
+
+        if (countRequestFailed) {
+            setCountsError("Unable to load one or more user counts. Try refreshing the dashboard.");
+        }
+
+        setLoading(false);
+        setRefreshing(false);
+        
     }, []);
 
     useEffect(() => {
         loadDashboard();
     }, [loadDashboard]);
 
+    // const metrics = data || {
+    //     users: { total: 0 },
+    //     tasks: { total: 0, loaded: 0, status: {} },
+    //     files: { total: 0 },
+    //     generatedAt: null,
+    // };
+
     const metrics = data || {
-        users: { total: 0 },
+        users: { total: 0, active: 0, loaded: 0, status: {}, roles: {} },
         tasks: { total: 0, loaded: 0, status: {} },
         files: { total: 0 },
         generatedAt: null,
@@ -58,8 +104,8 @@ export default function DashboardPage() {
         <div className="flex min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-white">
             <Sidebar role={user?.metadata?.role} onLogout={logout} />
             <main className="min-w-0 flex-1">
-            <Header Title="Dashboard" Desc="Operational overview and system activity." onRefresh={() => loadDashboard(true)} 
-                    disabled={refreshing}/>
+            {/* <Header Title="Dashboard" Desc="Operational overview and system activity." onRefresh={() => loadDashboard(true)} 
+                    disabled={refreshing}/> */}
 
                 {/* <header className="sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur dark:border-slate-800 dark:bg-slate-950/90">
                     <div className="mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-5 py-4 lg:px-8">
@@ -97,7 +143,7 @@ export default function DashboardPage() {
                     <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                         <MetricCard
                             title="Total users"
-                            value={metrics.users.total}
+                            value={totalUsers !== null ? totalUsers : "—"}
                             type="users"
                             description="Current user records available to your account."
                             loading={loading}
@@ -118,7 +164,7 @@ export default function DashboardPage() {
                         />
                         <MetricCard
                             title="Active Users"
-                            value={metrics.users.active}
+                            value={adminCount !== null ? adminCount : "—"}
                             type="active"
                             description="Currently active users on the system."
                             loading={loading}
