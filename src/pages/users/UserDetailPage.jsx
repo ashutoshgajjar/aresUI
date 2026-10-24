@@ -810,7 +810,7 @@ export default function UserDetailsPage() {
                     </section>
 
                     <div className="mt-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-[240px_minmax(0,1fr)]">
-                        <aside className="lg:sticky lg:top-6">
+                        <aside className="lg:sticky lg:top-15 lg:bottom-15">
                             <nav aria-label="User detail sections" className="rounded-2xl border border-slate-200/90 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                                 <p className="px-3 pb-2 pt-1 text-xs font-semibold uppercase tracking-wider text-slate-400">User sections</p>
                                 <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-1">
@@ -832,13 +832,6 @@ export default function UserDetailsPage() {
                                     })}
                                 </div>
                             </nav>
-                            <div className="mt-4 rounded-2xl border border-violet-100 bg-violet-50/70 p-4 dark:border-violet-400/15 dark:bg-violet-500/5">
-                                <div className="flex items-center gap-2 text-violet-800 dark:text-violet-200">
-                                    <FiShield size={17} />
-                                    <h3 className="text-sm font-semibold">Privacy and security</h3>
-                                </div>
-                                <p className="mt-2 text-xs leading-5 text-violet-800/80 dark:text-violet-200/75">Sensitive values are masked in view mode. Password hashes, CVV, and PIN are not displayed. System and network fields are read-only.</p>
-                            </div>
                         </aside>
 
                         <div className="min-w-0 space-y-6">
@@ -884,6 +877,14 @@ export default function UserDetailsPage() {
                         </div>
                     )}
                 </form>
+
+                <div className="mt-4 rounded-2xl border border-violet-100 bg-violet-50/70 p-4 dark:border-violet-400/15 dark:bg-violet-500/5">
+                    <div className="flex items-center gap-2 text-violet-800 dark:text-violet-200">
+                        <FiShield size={17} />
+                        <h3 className="text-sm font-semibold">Privacy and security</h3>
+                    </div>
+                    <p className="mt-2 text-xs leading-5 text-violet-800/80 dark:text-violet-200/75">Sensitive values are masked in view mode. Password hashes, CVV, and PIN are not displayed. System and network fields are read-only.</p>
+                </div>
 
                 <p className="text-center text-xs text-slate-400">User information is loaded from the application API. Permissions are enforced by the server.</p>
             </div>

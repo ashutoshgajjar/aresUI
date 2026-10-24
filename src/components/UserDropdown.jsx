@@ -329,6 +329,7 @@ export default function UserDropdown({
     onSettingsClick,
     align = "right",
     className = "",
+    btnClassName = "",
 }) {
     const [open, setOpen] = useState(false);
     const [isSigningOut, setIsSigningOut] = useState(false);
@@ -427,7 +428,7 @@ export default function UserDropdown({
                     setOpen((current) => !current);
                     setSignOutError("");
                 }}
-                className={`group flex items-center gap-2.5 rounded-full p-0.5 shadow-sm transition-all duration-200 focus-visible:outline focus-visible:outline-[hsl(270,50%,60%)] ${open ? "bg-purple-200" : ''}`}
+                className={`group flex items-center gap-2.5 rounded-full p-0.5 shadow-sm transition-all duration-200 focus-visible:outline focus-visible:outline-[hsl(270,50%,60%)] ${open ? "bg-purple-200" : ''} ${btnClassName}`}
             >
                 {/* Avatar Pill */}
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-tr from-violet-600 to-indigo-500 text-sm font-semibold text-white shadow-inner">

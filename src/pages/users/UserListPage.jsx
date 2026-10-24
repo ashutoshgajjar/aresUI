@@ -14,7 +14,6 @@ import {
 import { FaX } from "react-icons/fa6";
 import { RippleButton } from '@/components/RippleButton';
 import { usersApi } from '@/api/users.api';
-import Header from '@/components/layout/Header';
 
 function formatLabel(value) {
     if (value === null || value === undefined || value === '') {
@@ -232,8 +231,6 @@ export default function UserListPage() {
 
     return (
         <>
-            <Header Title='Home' onRefresh={() => retryRequest()} disabled={isLoading} />
-
             <main className='min-h-screen bg-slate-50/80 px-4 py-6 text-slate-900 sm:px-6 lg:px-8'>
                 <div className='mx-auto max-w-7xl space-y-7'>
                     {/* Page heading */}
@@ -447,7 +444,7 @@ export default function UserListPage() {
                         {/* Table */}
                         <div className='overflow-y-auto min-h-sm max-h-88 overscroll-contain'>
                             <table className='table table-fixed w-full border-separate border-spacing-0.5'>
-                                <thead className='table-header-group sticky top-0 backdrop-blur-sm z-10'>
+                                <thead className='table-header-group sticky top-0 backdrop-blur-sm z-2'>
                                     <tr className='table-row border-b border-gray-900 bg-gray-100/80 text-left'>
                                         <th
                                             scope='col'
