@@ -22,7 +22,7 @@ export default function MetricCard({ title, value, description, type, loading })
                         {loading ? (
                             <span className="inline-block h-9 w-20 animate-pulse rounded bg-slate-200 dark:bg-slate-800" />
                         ) : (
-                            value.toLocaleString()
+                            value?.toLocaleString() ?? '0'
                         )}
                     </div>
                 </div>

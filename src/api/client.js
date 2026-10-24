@@ -211,9 +211,7 @@
 // export const apiConfig = {
 //   baseUrl: API_BASE_URL,
 // };
-const API_BASE_URL = (
-  import.meta.env.VITE_API_BASE_URL || "/api/v1"
-).replace(/\/$/, "");
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL
 
 let csrfToken = null;
 let refreshPromise = null;
