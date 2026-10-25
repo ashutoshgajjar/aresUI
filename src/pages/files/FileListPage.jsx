@@ -20,7 +20,7 @@ import {
     FiVideo,
     FiX,
 } from "react-icons/fi";
-import Header from '@/components/layout/Header';
+// import Header from '@/components/layout/Header';
 import { filesApi } from "@/api/files.api";
 import { RippleButton } from "@/components/RippleButton";
 import toast from 'react-hot-toast';
@@ -553,7 +553,7 @@ export default function FileListPage() {
 
     return (
         <>
-            <Header Title='Files' onRefresh={() => handleRefresh()} disabled={isLoading} />        
+            {/* <Header Title='Files' onRefresh={() => handleRefresh()} disabled={isLoading} />         */}
             <main className="min-h-screen bg-slate-50/80 px-4 py-6 text-slate-900 sm:px-6 lg:px-8">
                 <div className="mx-auto max-w-7xl space-y-7">
                     {/* Page heading */}
