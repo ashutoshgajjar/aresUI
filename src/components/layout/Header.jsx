@@ -283,7 +283,7 @@ export default function Header({
                                             className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-xs font-medium transition-all focus-visible:outline-2 focus-visible:outline-[hsl(270,50%,60%)] ${
                                                 isActive
                                                     ? 'bg-[hsl(270,_50%,_92%)] text-neutral-950 font-semibold shadow-2xs border border-purple-950/10'
-                                                    : 'text-slate-600 hover:text-neutral-900 hover:bg-white/70'
+                                                    : 'text-slate-600 hover:text-neutral-900 hover:bg-[hsl(270,_50%,_95%)]'
                                             }`}
                                         >
                                             <Icon

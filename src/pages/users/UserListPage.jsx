@@ -11,9 +11,12 @@ import {
     FiAlertCircle,
     FiUser,
 } from 'react-icons/fi';
-import { FaX } from "react-icons/fa6";
+import { FaRotate, FaX } from "react-icons/fa6";
 import { RippleButton } from '@/components/RippleButton';
 import { usersApi } from '@/api/users.api';
+
+const PRIMARY_BUTTON = { hue: 270, saturation: 75, lightness: 55 };
+
 
 function formatLabel(value) {
     if (value === null || value === undefined || value === '') {
@@ -309,6 +312,26 @@ export default function UserListPage() {
                                 Manage accounts, review user information, and access individual profiles from one place.
                             </p>
                         </div>
+                        <RippleButton
+                            // {...PRIMARY_BUTTON}
+                            hue={270}
+                            saturation={100}
+                            lightness={50}
+                            variant='outline'
+                            size='sm'
+                            disabled={isLoading}
+                            onClick={retryRequest}
+                            // className='inline-flex h-11 items-center justify-center gap-2 self-start rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm dark:border-slate-700 dark:bg-slate-900 dark:text-slate-200 sm:self-auto'
+                            className='inline-flex items-center gap-1.5 px-2.5 py-1.5 disabled:cursor-not-allowed disabled:opacity-60'
+
+                        >
+                            <FaRotate
+                                size={16}
+                                className={isLoading ? 'animate-spin' : ''}
+                            />
+                            Refresh
+                        </RippleButton>
+
                     </header>
 
                     {/* Summary cards */}

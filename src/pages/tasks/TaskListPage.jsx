@@ -39,6 +39,8 @@ import {
 } from "react-icons/fi";
 
 import { tasksApi } from "@/api/tasks.api";
+import { FaRotate } from "react-icons/fa6";
+import { RippleButton } from "@/components/RippleButton";
 
 const PAGE_SIZE_OPTIONS = [20, 50, 100];
 
@@ -317,19 +319,21 @@ export default function TaskListPage() {
                             work that needs your attention.
                         </p>
                     </div>
-
-                    <button
-                        type="button"
-                        onClick={handleRefresh}
-                        disabled={isLoading}
-                        className="inline-flex h-11 items-center justify-center gap-2 self-start rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-violet-200 hover:bg-violet-50 hover:text-violet-700 disabled:cursor-not-allowed disabled:opacity-60 sm:self-auto"
-                    >
-                        <FiRefreshCw
-                            size={16}
-                            className={isLoading ? "animate-spin" : ""}
-                        />
-                        Refresh
-                    </button>
+                    <RippleButton
+                            type="button"
+                            hue={270}
+                            saturation={100}
+                            lightness={50}
+                            variant='outline'
+                            size='sm'
+                            onClick={handleRefresh}
+                            disabled={isLoading}
+                            // className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 disabled:opacity-60"
+                            className='inline-flex items-center gap-1.5 px-2.5 py-1.5 disabled:cursor-not-allowed disabled:opacity-60'
+                        >
+                            <FaRotate size={14} />
+                            Refresh
+                    </RippleButton>
                 </header>
 
                 {/* Summary cards */}
@@ -397,7 +401,7 @@ export default function TaskListPage() {
                             disabled={isLoading}
                             className="inline-flex shrink-0 items-center justify-center gap-2 rounded-lg border border-rose-200 bg-white px-3 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 disabled:opacity-60"
                         >
-                            <FiRefreshCw size={14} />
+                            <FaRotate size={14} />
                             Retry
                         </button>
                     </div>

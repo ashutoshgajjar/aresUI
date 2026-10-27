@@ -30,8 +30,8 @@ const PAGE_SIZE = 50;
 
 const buttonColors = {
     hue: 270,
-    saturation: 75,
-    lightness: 55,
+    saturation: 100,
+    lightness: 50,
 };
 
 function getFileName(file) {
@@ -574,20 +574,21 @@ export default function FileListPage() {
                         </div>
 
                         <div className="flex flex-wrap items-center gap-3">
-                            {/* <RippleButton
+                            <RippleButton
                                 {...buttonColors}
                                 variant="outline"
                                 size="sm"
                                 disabled={isLoading}
                                 onClick={handleRefresh}
-                                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-violet-200 hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-60"
+                                // className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-violet-200 hover:bg-violet-50 disabled:cursor-not-allowed disabled:opacity-60"
+                                className='inline-flex items-center gap-1.5 px-2.5 py-1.5 disabled:cursor-not-allowed disabled:opacity-60'
                             >
                                 <FiRefreshCw
                                     size={16}
                                     className={isLoading ? "animate-spin" : ""}
                                 />
                                 Refresh
-                            </RippleButton> */}
+                            </RippleButton>
 
                             <input
                                 ref={fileInputRef}
