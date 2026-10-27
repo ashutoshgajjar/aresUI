@@ -976,6 +976,7 @@ export async function apiPatch(
       ...options,
       method: "PATCH",
       body,
+      credentials: "include",
     },
   );
 }
